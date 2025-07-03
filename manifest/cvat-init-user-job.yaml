@@ -12,6 +12,8 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: cvat
+        securityContext:
+          runAsUser: 0
         image: openvino/cvat_server:v2.1.0
         env:
           - name: CVAT_POSTGRES_HOST

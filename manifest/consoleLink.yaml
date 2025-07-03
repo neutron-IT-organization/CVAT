@@ -1,0 +1,11 @@
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: lcvat-console-link
+spec:
+  applicationMenu:
+    imageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Green_icon_-_Flag.ZGH.png/640px-Green_icon_-_Flag.ZGH.png'
+    section: IA
+  href: 'https://cvat.apps.neutron-sno-gpu.neutron-it.fr/'
+  location: ApplicationMenu
+  text: CVAT
