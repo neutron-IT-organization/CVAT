@@ -14,6 +14,8 @@ spec:
         app: cvat-redis # has to match .spec.selector.matchLabels
     spec:
       terminationGracePeriodSeconds: 10
+      securityContext:
+        runAsUser: 0
 {{ if .Values.workloads }}
 {{ toYaml .Values.workloads | indent 6 }}
 {{ end}}

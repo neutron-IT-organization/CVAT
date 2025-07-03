@@ -16,6 +16,7 @@ spec:
       terminationGracePeriodSeconds: 10
       securityContext:
         fsGroup: 1000
+        runAsUser: 0
 {{ if .Values.workloads }}
 {{ toYaml .Values.workloads | indent 6 }}
 {{ end}}
