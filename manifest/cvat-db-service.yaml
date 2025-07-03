@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: cvat-db
+spec:
+  ports:
+    - name: psql
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+  selector:
+    app: cvat-db

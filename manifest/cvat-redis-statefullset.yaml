@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cvat-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cvat-redis
+  serviceName: cvat-redis
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: cvat-redis
+    spec:
+      containers:
+      - name: cvat-redis
+        image: redis:4.0-alpine
+        ports:
+        - name: psql
+          containerPort: 5432
+          protocol: TCP
+        resources: {}
+        securityContext:
+          runAsUser: 0
+      tolerations:
+      - key: kubernetes.azure.com/scalesetpriority
+        operator: Equal
+        value: spot
+        effect: NoSchedule
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  revisionHistoryLimit: 10
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cvat-opa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cvat-opa
+  serviceName: opa
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: cvat-opa
+    spec:
+      containers:
+      - name: cvat-opa
+        image: frankdekervel/opa-cvat-rules:cvat-helm-0.2.4
+        ports:
+        - name: http
+          containerPort: 8181
+          protocol: TCP
+        resources: {}
+        securityContext:
+          runAsUser: 0
+      tolerations:
+      - key: kubernetes.azure.com/scalesetpriority
+        operator: Equal
+        value: spot
+        effect: NoSchedule
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  revisionHistoryLimit: 10
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain

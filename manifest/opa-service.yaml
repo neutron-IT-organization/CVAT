@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: opa
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8181
+      targetPort: 8181
+  selector:
+    app: cvat-opa
