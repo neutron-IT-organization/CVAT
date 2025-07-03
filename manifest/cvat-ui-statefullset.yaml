@@ -29,6 +29,7 @@ spec:
         operator: Equal
         value: spot
         effect: NoSchedule
+      serviceAccountName: cvat-sa
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:

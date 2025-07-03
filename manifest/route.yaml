@@ -1,0 +1,99 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: cvat-ui
+spec:
+  host: cvat.apps.neutron-sno-gpu.neutron-it.fr
+  path: /
+  to:
+    kind: Service
+    name: cvat-ui
+  port:
+    targetPort: 80
+  tls:
+    termination: edge
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: cvat-static
+spec:
+  host: cvat.apps.neutron-sno-gpu.neutron-it.fr
+  path: /static
+  to:
+    kind: Service
+    name: cvat
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: cvat-opencv
+spec:
+  host: cvat.apps.neutron-sno-gpu.neutron-it.fr
+  path: /opencv
+  to:
+    kind: Service
+    name: cvat
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: cvat-git
+spec:
+  host: cvat.apps.neutron-sno-gpu.neutron-it.fr
+  path: /git
+  to:
+    kind: Service
+    name: cvat
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: cvat-api
+spec:
+  host: cvat.apps.neutron-sno-gpu.neutron-it.fr
+  path: /api
+  to:
+    kind: Service
+    name: cvat
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: cvat-analytics
+spec:
+  host: cvat.apps.neutron-sno-gpu.neutron-it.fr
+  path: /analytics
+  to:
+    kind: Service
+    name: cvat
+    weight: 100
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+
+
+
+
+

@@ -1,5 +1,5 @@
-apiVersion: apps/v1
 kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: cvat
 spec:
@@ -7,67 +7,57 @@ spec:
   selector:
     matchLabels:
       app: cvat
-  serviceName: cvat
-  podManagementPolicy: OrderedReady
   template:
     metadata:
       labels:
         app: cvat
     spec:
-      containers:
-      - name: cvat
-        image: openvino/cvat_server:v2.1.0
-        ports:
-        - name: http
-          containerPort: 8080
-          protocol: TCP
-        env:
-        - name: CVAT_POSTGRES_HOST
-          value: cvat-db
-        - name: ALLOWED_HOSTS
-          value: '*'
-        - name: CVAT_REDIS_HOST
-          value: cvat-redis
-        - name: ADAPTIVE_AUTO_ANNOTATION
-          value: 'false'
-        - name: CVAT_SHARE_URL
-          value: Mounted data
-        volumeMounts:
-        - name: cvat-data
-          mountPath: /home/django/data
-        - name: cvat-keys
-          mountPath: /home/django/keys
-        - name: cvat-logs
-          mountPath: /home/django/logs
-        - name: cvat-share
-          mountPath: /home/django/share
-          readOnly: true
-        resources: {}
-        securityContext:
-          fsGroup: 1000
       volumes:
-      - name: cvat-data
-        persistentVolumeClaim:
-          claimName: cvat-data
-      - name: cvat-keys
-        persistentVolumeClaim:
-          claimName: cvat-keys
-      - name: cvat-logs
-        persistentVolumeClaim:
-          claimName: cvat-logs
-      - name: cvat-share
-        persistentVolumeClaim:
-          claimName: cvat-share
-      tolerations:
-      - key: kubernetes.azure.com/scalesetpriority
-        operator: Equal
-        value: spot
-        effect: NoSchedule
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      partition: 0
-  revisionHistoryLimit: 10
-  persistentVolumeClaimRetentionPolicy:
-    whenDeleted: Retain
-    whenScaled: Retain
+        - name: cvat-data
+          persistentVolumeClaim:
+            claimName: cvat-data
+        - name: cvat-keys
+          persistentVolumeClaim:
+            claimName: cvat-keys
+        - name: cvat-logs
+          persistentVolumeClaim:
+            claimName: cvat-logs
+        - name: cvat-share
+          persistentVolumeClaim:
+            claimName: cvat-share
+      serviceAccountName: cvat-sa
+      containers:
+        - resources: {}
+          name: cvat
+          env:
+            - name: CVAT_POSTGRES_HOST
+              value: cvat-db
+            - name: DJANGO_MODWSGI_EXTRA_ARGS
+            - name: ALLOWED_HOSTS
+              value: '*'
+            - name: CVAT_REDIS_HOST
+              value: cvat-redis
+            - name: ADAPTIVE_AUTO_ANNOTATION
+              value: 'false'
+            - name: CVAT_SHARE_URL
+              value: Mounted data
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: cvat-data
+              mountPath: /home/django/data
+            - name: cvat-keys
+              mountPath: /home/django/keys
+            - name: cvat-logs
+              mountPath: /home/django/logs
+            - name: cvat-share
+              readOnly: true
+              mountPath: /home/django/share
+          image: 'openvino/cvat_server:v2.1.0'
+      securityContext:
+        fsGroup: 1000
+  serviceName: cvat
+
+
